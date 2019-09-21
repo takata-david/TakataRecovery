@@ -1,0 +1,49 @@
+{% extends "users/base.html" %}{% load crispy_forms_tags %}
+{% block content1 %}
+<h1 class="display-4 text-white mt-5 mb-2">Result</h1>
+{% endblock content1 %}
+
+{% block content2 %}
+<table id="example" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>VIN</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Series</th>
+            <th>Year</th>
+            <th>AirbagLocation</th>
+            <th>Alpha</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if result|length > 0 %}
+            <p>Hurray! This is a recall Vehicle</p>
+            {% for c in result %}
+                <tr>
+                    <td>{{ c.5 }}</td>
+                    <td>{{ c.2 }}</td>
+                    <td>{{ c.3 }}</td>
+                    <td>{{ c.4 }}</td>
+                    <td>{{ c.6 }}</td>
+                    <td>{{ c.0 }}</td>
+                    <td>{{ c.1 }}</td>
+                </tr>
+            {% endfor %}
+            <div class="content-section">
+                <form action="result/" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        {{ form1|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <p>Sorry, Not a recall vehicle</p>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock content2 %}

@@ -32,14 +32,14 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'crispy_forms',
-    'users.apps.UsersConfig',
-    'vinwash.apps.VinwashConfig',
+    'takatarecovery.apps.TakatarecoveryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -81,16 +81,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'takata_dev_db',
-        'HOST': 'LAPTOP-HFCHUMLM',
+        'HOST': 'devdjango.database.windows.net',
         'USER': 'takata_prafull',
-        'PASSWORD': 'Takata001',
+        'PASSWORD': 'Vinwash001',
         'OPTIONS': {
             'provider': 'SQLOLEDB',
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -133,7 +132,7 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'vinwash-home'
+LOGIN_REDIRECT_URL = 'takatarecovery-home'
 LOGIN_URL = 'login'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

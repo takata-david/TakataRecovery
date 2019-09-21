@@ -1,0 +1,304 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Takata Recovery</title>
+    <link rel="shortcut icon" href="images/icons/favicon.png" />
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+      <link rel="stylesheet" href="{% static 'takatarecovery/foundation.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/animate.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/morphext.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/owl.carousel.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/owl.transitions.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/slicknav.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/owl.theme.css' %}">
+    <style>
+        .form-control {
+            border: 0px solid black;
+        }
+        .form-control input {
+            border: 1px solid black;
+            margin-bottom: 7px;
+        }
+    </style>
+  </head>
+  {% if total == 165 %}
+      <body class="login-page prafull" style="background-size: contain; background: url(/media/takatarecovery/money.jpg); ">
+  {% elif total == 90 or total == 75%}
+      <body class="login-page prafull" style="background-size: contain; background: url(/media/takatarecovery/coinsf.png)">
+  {% else %}
+      <body class="login-page prafull" style="background-size: contain; background: url(/media/takatarecovery/miss.jpg)">
+  {% endif %}
+
+
+  <div id="loader-wrapper">
+			<div id="loader"></div>
+
+			<div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+
+  </div>
+
+<!--  HEADER -->
+<header>
+<div class="top">
+	<div class="row">
+	<div class="small-12 large-3 medium-3 columns">
+			<div class="logo" >
+				<a href="{% url 'takatarecovery-home' %}" title=""><img src="/media/takatarecovery/araa.png" alt="" title="" style="width: 60px" /></a>
+			</div>
+		</div>
+
+<div class="small-12 large-9 medium-9 columns">
+
+<!--  NAVIGATION MENU AREA -->
+    <nav class="desktop-menu">
+		<ul class="sf-menu" id="navigation">
+			<li><a href="{% url 'takatarecovery-home' %}">HOME</a></li>
+			<li><a href="{% url 'takatarecovery-makemodel' %}">MAKE MODEL CHECK</a></li>
+			<li><a href="{% url 'takatarecovery-aboutus' %}">ABOUT US</a></li>
+			<li><a href="{% url 'takatarecovery-privacy' %}">PRIVACY POLICY</a></li>
+			<li><a href="{% url 'takatarecovery-contact' %}">CONTACT</a></li>
+		</ul>
+	</nav>
+<!--  END OF NAVIGATION MENU AREA -->
+
+  </div>
+  </div>
+  </div>
+
+  <!--  MESSAGES ABOVE HEADER IMAGE -->
+<div class="message">
+	<div class="row">
+
+		<div class="domainsearch">
+			<div class="row collapse">
+				<div class="small-12 large-10 medium-10 large-centered medium-centered columns">
+
+
+                            {% if result|length > 0 %}
+                                <div class="content-section">
+                                <table id="example" class="table table-striped table-bordered" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>VIN</th>
+                                            <th>Make</th>
+                                            <th>Model</th>
+                                            <th>Series</th>
+                                            <th>Money</th>
+                                            <th>Year</th>
+                                            <th>AirbagLocation</th>
+                                            <th>Alpha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <h3 style="background: red">HURRAY!!! THIS IS A RECALL VEHICLE</h3>
+                                        {% for c in result %}
+                                            <tr>
+                                                <td>{{ c.5 }}</td>
+                                                <td>{{ c.2 }}</td>
+                                                <td>{{ c.3 }}</td>
+                                                <td>{{ c.4 }}</td>
+                                                <td>
+                                                    {% if  c.0  == "Driver" %}
+                                                        $75
+                                                    {% endif %}
+                                                    {% if  c.0  == "Passenger" %}
+                                                        $90
+                                                    {% endif %}
+                                                </td> <!-- money -->
+                                                <td>{{ c.6 }}</td>
+                                                <td>{{ c.0 }}</td>
+                                                <td>{{ c.1 }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        <!--<tr>
+                                            <td>Total</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>-->
+                                    </tbody>
+                                </table>
+                                </div>
+                                <h3 style="color: darkgreen">COMPENSATION NOW AVAILABLE:</h3>
+                                {% if total == 165 %}
+                                    <h4 style="color: darkgreen">Both - $165</h4>
+                                {% elif total == 90 %}
+                                    <h4 style="color: darkgreen">Passenger - $90</h4>
+                                {% else %}
+                                    <h4 style="color: darkgreen">Driver - $75</h4>
+                                {% endif %}
+                                <div class="content-section">
+                                    <form action="index-result/" method="POST" enctype="multipart/form-data" class="form-control">
+                                        <div class="row collapse" >
+                                            <h3 style="color: dodgerblue">CLAIM NOW:</h3>
+                                        {% csrf_token %}
+                                            {{ form1 | crispy }}
+                                        <div class="form-group">
+                                            <div class="small-12 large-10 medium-10 columns" style="margin-top: 10px; width:100%;">
+                                                <input type="submit" value="Submit" name="submit">
+                                            </div>
+                                            <!--<div class="small-12 large-10 medium-10 columns" style="margin-top: 10px; float: left;">
+                                                <h4>We will contact you to arrange recovery and payment.</h4>
+                                            </div>-->
+                                            <h4 style="color: dodgerblue;"><i>We will contact you to arrange recovery and payment.</i></h4>
+                                        </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div class="item" style="text-align:center;">
+                                    <div style="text-align: center;">
+                                        <p style="background: red; font-size: 28px; ">
+                                        SORRY, NOT A RECALL VEHICLE
+                                        </p>
+                                        <br>
+                                        <br>
+                                        <p style="color: #3a945b; font-size: 30px; ">
+                                            <b><i>But well worth a try:</i></b>
+                                        </p>
+                                        <br>
+                                        <table class="darkTable">
+                                            <tr>
+                                                <th>Number of VINs found</th>
+                                                <th>Number of Airbags Paid out on</th>
+                                                <th>Total Paid to Recyclers</th>
+                                            </tr>
+                                            <tr>
+                                                <td>34324</td>
+                                                <td>45165</td>
+                                                <td>$234324</td>
+                                            </tr>
+                                        </table>
+                                   </div>
+                                </div>
+
+                            {% endif %}
+
+
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--  END OF MESSAGES ABOVE HEADER IMAGE -->
+</header>
+<!--  END OF HEADER -->
+
+<!--  FEATURES -->
+
+<!--  END OF FEATURES -->
+
+<!--  CALL TO ACTION  -->
+ 
+<!--  END OF CALL TO ACTION -->
+
+<!--  PRICING BOXES  -->
+ 
+<!--  END OF PRCING BOXES  -->
+
+<!--  TESTIMONIALS  -->
+ 
+<!--  END OF TESTIMONIALS -->
+
+<!--  MONITORING  -->
+
+<!--  END OF MONITORING  -->
+
+<!--  FOOTER  -->
+<footer>
+<!--<div class="row">
+<div class="small-12 columns">
+<div class="contacts">
+<div class="row">
+<div class="small-12 large-3 medium-3 columns">
+<i class="fa fa-map-marker"></i>
+Melbourne, Australia
+</div>
+<div class="small-12 large-3 medium-3 columns">
+<i class="fa fa-mobile"></i>
++61 451 65 2908
+</div>
+<div class="small-12 large-3 medium-3 columns">
+<i class="fa fa-comments"></i>
+LIVE CHAT
+</div>
+<div class="small-12 large-3 medium-3 columns">
+<i class="fa fa-envelope-o"></i>
+E-MAIL US
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="row">
+<div class="small-12 columns">
+<div class="footerlinks">
+</div>
+
+</div>
+</div>
+
+SOCIAL LINKS
+<div class="social">
+<div class="row">
+<div class="small-12 columns">
+<ul class="small-block-grid-1 large-block-grid-5 medium-block-grid-5">
+<li class="facebook"><a href="">FACEBOOK</a></li>
+<li class="twitter"><a href="">TWITTER</a></li>
+<li class="googleplus"><a href="">GOOGLE+</a></li>
+<li class="linkedin"><a href="">LINKEDIN</a></li>
+<li class="pinterest"><a href="">PINTEREST</a></li>
+</ul>
+</div>
+</div>
+</div>-->
+<!-- END OF SOCIAL LINKS -->
+<p class="copyright">© Copyright ARAA, all rights reserved. </p>
+</footer>
+<!--  END OF FOOTER  -->
+
+<a href="#top" id="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+    <script src="{% static 'takatarecovery/vendor/export-data.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/jquery.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/what-input.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/foundation.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/hoverIntent.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/superfish.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/morphext.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/wow.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/jquery.slicknav.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/waypoints.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/jquery.animateNumber.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/retina.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/custom.js' %}"></script>
+    <script>window.jQuery || document.write('<script src="{% static 'takatarecovery/vendor/jquery-1.9.1.min.js' %}"><\/script>')</script>
+    <script src="{% static 'takatarecovery//vendor/modernizr-2.6.2.min.js' %}"></script>
+    <script>$(document).ready(function() {
+
+    setTimeout(function(){
+        $('body').addClass('loaded');
+        $('h1').css('color','#222222');
+    }, 3000);
+
+});</script>
+  </body>
+</html>

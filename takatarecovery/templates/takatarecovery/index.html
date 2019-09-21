@@ -1,0 +1,212 @@
+{% load static %}{% load crispy_forms_tags %}
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Takata Recovery</title>
+    <link rel="shortcut icon" href="images/icons/favicon.png" />
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{% static 'takatarecovery/foundation.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/animate.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/morphext.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/owl.carousel.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/owl.transitions.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/slicknav.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'takatarecovery/owl.theme.css' %}">
+  </head>
+  <body class="login-page" style="background: url(/media/takatarecovery/login_page_bg.jpg)">
+
+<!--  HEADER -->
+<header class="login">
+<div class="top">
+  <div class="row">
+  <div class="small-12 large-3 medium-3 columns">
+   <div class="logo" >
+		<a href="{% url 'takatarecovery-home' %}" title=""><img src="/media/takatarecovery/araa.png" alt="" title="" style="width: 60px" /></a>
+	</div>
+</div>
+
+<div class="small-12 large-9 medium-9 columns">
+
+<!--  NAVIGATION MENU AREA -->
+    <nav class="desktop-menu">
+		<ul class="sf-menu" id="navigation">
+			<li class="current-menu-item"><a href="{% url 'takatarecovery-home' %}">HOME</a></li>
+			<li><a href="{% url 'takatarecovery-makemodel' %}">MAKE MODEL CHECK</a></li>
+			<li><a href="{% url 'takatarecovery-aboutus' %}">ABOUT US</a></li>
+			<li><a href="{% url 'takatarecovery-privacy' %}">PRIVACY POLICY</a></li>
+			<li><a href="{% url 'takatarecovery-contact' %}">CONTACT</a></li>
+		</ul>
+	</nav>
+<!--  END OF NAVIGATION MENU AREA -->
+
+  </div>
+  </div>
+  </div>
+
+</header>
+<!--  END OF HEADER -->
+
+<!-- LOGIN FORM -->
+<div class="login-container">
+<div class="row">
+	<div class="small-12 columns">
+		<div class="message-intro">
+			<span class="message-line"></span>
+			<p>Takata Recovery</p>
+			<span class="message-line"></span>
+		</div>
+		<section class="">
+		<div class="row">
+		<div class="small-12 columns" >
+				<p style="color: white; font-size: 30px;  text-align: center;">
+			SALVAGE TAKATA AIRBAGS RECOVERY PROGRAM
+		</p>
+		<hr class="small"/>
+		<div>
+
+			<div class="item" style="text-align:center;">
+				<div style="text-align: center;">
+
+					<p style="color: white; font-size: 20px; ">
+					<!--
+						A Program of the Auto Recyclers Association of Australia
+					-->
+					</p>
+					<p style="color: white; font-size: 20px;">
+						<!--
+						AUTO RECYCLERS, CAR & TRUCK WRECKERS, SCRAP METAL DEALERS, VEHICLE AND PARTS EXPORTERS. TOWING OPERATORS, CAR CARRIERS, PARTS TRADERS
+						-->
+					</p>
+					<p id="text2"  style="color: white; font-size: 30px; ">
+						<span style="background: green; padding-left: 20px; padding-right: 20px;">
+							DON'T LET A BAD AIRBAG ESCAPE!!!
+						</span>
+					</p>
+					<p id="text2"  style="color: white; font-size: 30px; ">
+						<span style="color: #ffc733;  padding-left: 20px; padding-right: 20px;">
+							CASH IN NOW
+						</span>
+					</p>
+					<p id="text2"  style="color: white; font-size: 30px; ">
+						<span style="color: #ffc733;  padding-left: 20px; padding-right: 20px;">
+							CHECK EVERY VEHICLE THAT COMES INTO YOUR YARD
+						</span>
+					</p>
+					<p id="text2"  style="color: white; font-size: 30px; ">
+						<span style="color: #ffc733;  padding-left: 20px; padding-right: 20px;">
+							CHECK VIN NOW
+						</span>
+					</p>
+			   </div>
+			</div>
+		</div>
+
+		</div>
+		</div>
+		</section>
+	</div>
+	<div class="domainsearch">
+    <div class="row collapse">
+		<div class="small-12 large-10 medium-10 large-centered medium-centered columns">
+
+			 <form action="" method="POST" enctype="multipart/form-data">
+				<div class="row collapse">
+                    {% csrf_token %}
+					<div class="small-12 large-10 medium-10 columns">
+						{{ form|crispy }}<!--<input type="text" name="sld" onfocus="if (this.value == 'Enter your domain') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Enter your domain';}" value="Enter Vin"/>-->
+					</div>
+
+					<div class="small-12 large-2 medium-2 columns">
+						<input class="btn-wide" type="submit" value="Search" name="submit">
+					</div>
+				</div>
+			</form>
+            <p id="text2"  style="color: white; font-size: 30px; text-align: center;">
+						<span style="color: #ffc733;  padding-left: 20px; padding-right: 20px;">
+							$75 DRIVER, $90 PASSENGER, $165 BOTH
+						</span>
+					</p>
+            <p id="text2"  style="color: white; font-size: 30px; text-align: center;">
+                <span style="background: red;  padding-left: 20px; padding-right: 20px;">
+                    COLLECTION AND PAYMENT WITHIN 30 DAYS
+                </span>
+            </p>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+<!--  FOOTER  -->
+<footer>
+<!--<div class="row">
+<div class="small-12 columns">
+<div class="contacts">
+<div class="row">
+<div class="small-12 large-3 medium-3 columns">
+<i class="fa fa-map-marker"></i>
+Melbourne, Australia
+</div>
+<div class="small-12 large-3 medium-3 columns">
+<i class="fa fa-mobile"></i>
++61 451 65 2908
+</div>
+<div class="small-12 large-3 medium-3 columns">
+<i class="fa fa-envelope-o"></i>
+E-MAIL US
+</div>
+</div>
+</div>
+</div>
+</div>-->
+
+
+<!--<div class="row">
+<div class="small-12 columns">
+<div class="footerlinks">
+</div>
+
+</div>
+</div>-->
+
+<!--SOCIAL LINKS
+<div class="social">
+<div class="row">
+<div class="small-12 columns">
+<ul class="small-block-grid-1 large-block-grid-5 medium-block-grid-5">
+<li class="facebook"><a href="">FACEBOOK</a></li>
+<li class="twitter"><a href="">TWITTER</a></li>
+<li class="googleplus"><a href="">GOOGLE+</a></li>
+<li class="linkedin"><a href="">LINKEDIN</a></li>
+<li class="pinterest"><a href="">PINTEREST</a></li>
+</ul>
+</div>
+</div>
+</div>-->
+<!-- END OF SOCIAL LINKS -->
+<p class="copyright">© Copyright ARAA, all rights reserved. </p>
+</footer>
+<!--  END OF FOOTER  -->
+
+<a href="#top" id="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+    <script src="{% static 'takatarecovery/vendor/export-data.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/jquery.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/what-input.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/foundation.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/hoverIntent.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/superfish.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/morphext.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/wow.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/jquery.slicknav.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/waypoints.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/jquery.animateNumber.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/vendor/retina.min.js' %}"></script>
+    <script src="{% static 'takatarecovery/custom.js' %}"></script>
+  </body>
+</html>
