@@ -15,9 +15,12 @@ from datetime import date
 
 #resultdf = pd.DataFrame()
 vin = ""
+Make = ""
+Model = ""
+Year = ""
+total = 0
 
-
-def makemodel(request):
+def makemodel1(request):
     return render(request, 'takatarecovery/makemodel.html')
 
 def aboutus(request):
@@ -33,7 +36,6 @@ def contact(request):
 def home(request):
     totald = 0
     totalp = 0
-    total = 0
     resultdf = pd.DataFrame()
     form = vinCheckForm(request.POST)
     form1 = detailsForm(request.POST)
@@ -57,9 +59,12 @@ def home(request):
                         VehicleID = str(k['VehicleID'])
                         VIN = str(k['VIN'])
                         PRANum = str(k['PRANum'])
+                        global Make
                         Make = str(k['Make'])
+                        global Model
                         Model = str(k['Model'])
                         Series = str(k['Series'])
+                        global Year
                         Year = str(k['Year'])
                         AirbagLocation = str(k['AirbagLocation'])
                         IsAlpha = str(k['IsAlpha'])
@@ -82,6 +87,7 @@ def home(request):
             return render(request, 'takatarecovery/index.html', context1)
 
         resultList = resultdf.values.tolist()
+        global total
         total = totald + totalp
         print(total)
 
@@ -100,46 +106,118 @@ def home(request):
 
 def makeModelCheck(request):
     form = makeModelForm(request.POST)
+    yearFromDB = []
+    resultList = []
+    flag = 0
     try:
         if request.method == 'POST':
-            oem = request.POST.get('oem')
-            model = request.POST.get('model')
+            oem1 = request.POST.get('oem')
+            model1 = request.POST.get('model1')
             year = request.POST.get('year')
 
-        else:
-            locatedQuery = makemodel.objects.raw(
-                'select id, oem, model, year, airbag, status from takatarecovery_makemodel')
+            val = makemodel.objects.values('oem', 'model', 'year', 'airbag', 'status').filter(oem=oem1,
+                                                                                              model=model1)
 
-            located = pd.DataFrame(locatedQuery)
-            print(located)
+            values = pd.DataFrame(val)
+            print(values)
+
+            #entering year values to list only if below condition is correct
+            if oem1 != "" and model1 != "" and year != "" and len(values) > 0:
+                for y in values['year']:
+                    yStr = str(y)
+                    print(yStr)
+                    if "," in yStr and "-" in yStr:
+                        yStr1 = yStr.split(', ')
+                        print(yStr1)
+                        for yS in yStr1:
+                            yStr2 = yS.split('-')
+                            for yo in yStr2:
+                                yearFromDB.append(yo)
+                            print(yStr2)
+                    elif "-" in yStr:
+                        yStr2 = yStr.split('-')
+                        for yo in yStr2:
+                            yearFromDB.append(yo)
+                        print(yStr2)
+                    else:
+                        yearFromDB.append(yStr)
+                        continue
+
+                print(yearFromDB)
+                print(year)
+                #Year check based on year values in db
+                if len(yearFromDB) == 4:
+                    y1 = int(yearFromDB[0])
+                    y2 = int(yearFromDB[1])
+                    y3 = int(yearFromDB[2])
+                    y4 = int(yearFromDB[3])
+
+                    for x in range(y1, y2+1):
+                        for y in range(y3, y4+1):
+                            if int(year) == x or int(year) == y:
+                                flag = 1
+                elif len(yearFromDB) == 3:
+                    y1 = int(yearFromDB[0])
+                    y2 = int(yearFromDB[1])
+                    y3 = int(yearFromDB[2])
+
+                    if int(year) == y3:
+                        flag = 1
+                    else:
+                        for y in range(y1, y2+1):
+                            if int(year) == y:
+                                flag = 1
+                elif len(yearFromDB) == 2:
+                    y1 = int(yearFromDB[0])
+                    y2 = int(yearFromDB[1])
+
+                    for y in range(y1, y2+1):
+                        if int(year) == y:
+                            flag = 1
+                else:
+                    y1 = int(yearFromDB[0])
+
+                    if int(year) == y1:
+                        flag = 1
+
+                if flag == 1:
+                    resultList = values.values.tolist()
+                    print(resultList)
+                else:
+                    print("Not a recall vehicle!!")
+        else:
+
             context = {
                 'form': form
             }
-            return render(request, 'takatarecovery/make-model.html', context)
+            return render(request, 'takatarecovery/makemodel.html', context)
 
     except Exception:
         print("Unexpected error:", sys.exc_info()[0])
         raise
 
     context = {
-        'form': form
+        'form': form,
+        'result': resultList
     }
-    return render(request, 'takatarecovery/make-model.html', context)
+    return render(request, 'takatarecovery/makemodel.html', context)
 
 
 # Database storage and mail notification
 def details(request):
-    server = smtplib.SMTP(host='smtp.gmail.com', port=587)
+    server = smtplib.SMTP(host='smtp.office365.com', port=587)
     server.starttls()
-    MY_ADDRESS = 'takatarecovery@gmail.com'
+    MY_ADDRESS = 'donotreply@takatarecovery.com'
     PASS = 'Takata001'
     server.login(MY_ADDRESS, PASS)
 
     #form = detailsForm(request.POST)
-    email = "vedant@takatarecovery.com"
+    email = "admin@takatarecovery.com"
     flag = "Error"
     today = date.today()
     currentDate = today.strftime("%Y-%m-%d")
+    source = 'Website'
+    location = ""
     print(currentDate)
     global vin
     print(vin)
@@ -152,14 +230,27 @@ def details(request):
             print(contactno)
             print(businessEmail)
 
+            if(total == 165):
+                location = "Both"
+            elif(total == 90):
+                location = "Passenger"
+            elif(total == 75):
+                location = "Driver"
+
             if(vin != ""):
                 if(businessEmail != ""):
                     bmsg = MIMEMultipart()
                     bmsg['From'] = MY_ADDRESS
                     bmsg['To'] = businessEmail
-                    bmsg['Subject'] = "TakataRecovery Website Confirmation"
+                    bmsg['Subject'] = "Takata Recovery Program – Compensation for Affected Airbags"
 
-                    message = "Hi,\n\n\tYour details are sent to ARAA.\n\tWe will contact you.\n\tThank you.\n\nRegards,\nTakata Recovery"
+                    message = "Thank you for registering an Affected VIN for recovery on behalf the vehicle manufacturer.\n\n" \
+                              "Details of Undeployed Takata Affected Airbags for which you will receive compensation are:\n" \
+                              "\tVIN: "+vin+"\n"+ "" \
+                              "\tMake: "+Make+"\n\tModel: "+Model+"\n\tYear: "+str(Year)+"\n\tPassenger/Drive/Both: "+location+"\n\tCompensation: "+str(total)+" AUD\n" \
+                              "\tContact Name: "+bname+"" \
+                                                       "\n\tContact Number: "+str(contactno)+"\n\tContact email: "+businessEmail+"\n\n" \
+                              "Deployed Airbags may qualify for Certificate of Destruction Compensation*\n\nWe will contact you within 48 hours to arrange recovery and compensation.\n\nKind regards,\n\nDavid Nolan\nExecutive Director\nAuto Recyclers Association of Australia"
 
                     bmsg.attach(MIMEText(message, 'plain'))
 
@@ -169,15 +260,23 @@ def details(request):
                 msg = MIMEMultipart()
                 msg['From'] = MY_ADDRESS
                 msg['To'] = email
-                msg['Subject'] = "TakataRecovery Website Notification"
+                msg['Subject'] = "Takata Recovery Program – Compensation for Affected Airbags"
 
                 if(bname != "" or contactno != "" or businessEmail != ""):
-                    message = "Hi,\n\n\tFollowing business check the VIN: "+vin+"\n\tBusiness name: "+bname+"\n\tContact no: "+contactno+"\n\tEmail: "+businessEmail+"\n\tPlease, contact the business.\n\nRegards,\nTakata Recovery"
+                    message = "Thank you for registering an Affected VIN for recovery on behalf the vehicle manufacturer.\n\n" \
+                              "Details of Undeployed Takata Affected Airbags for which you will receive compensation are:\n" \
+                              "\tVIN: " + vin + "\n" + "" \
+                                                       "\tMake: " + Make + "\n\tModel: " + Model + "\n\tYear: " + str(
+                        Year) + "\n\tPassenger/Drive/Both: " + location + "\n\tCompensation: " + str(total) + " AUD\n" \
+                                                                                                              "\tContact Name: " + bname + "" \
+                                                                                                                                           "\n\tContact Number: " + str(
+                        contactno) + "\n\tContact email: " + businessEmail + "\n\n" \
+                        "Deployed Airbags may qualify for Certificate of Destruction Compensation*\n\nWe will contact you within 48 hours to arrange recovery and compensation.\n\nKind regards,\n\nDavid Nolan\nExecutive Director\nAuto Recyclers Association of Australia"
 
                     msg.attach(MIMEText(message, 'plain'))
 
                     server.send_message(msg)
-                    instance = takatarecovery(vin = vin, business_name = bname, contact_no = contactno, email = businessEmail, date=currentDate)
+                    instance = takatarecovery(vin = vin, business_name = bname, contact_no = contactno, email = businessEmail, date=currentDate, source=source)
                     instance.save()
                     flag = "Success"
 

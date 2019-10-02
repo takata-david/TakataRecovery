@@ -54,46 +54,50 @@
 			<div class="row collapse">
 				<div class="small-12 large-10 medium-10 large-centered medium-centered columns">
 
-					 <form method="post">
-						<div class="row collapse">
-
-							  <div class="small-12 large-10 medium-10 columns" style="margin-top: 10px;">
-								<select class="btn-wide">
-									<option>Please Select the Manufacturer</option>
-									<option> b</option>
-									<option> c</option>
-								</select>
-							  </div>
-							  <div class="small-12 large-10 medium-10 columns" style="margin-top: 10px;">
-								<select class="btn-wide">
-									<option>Please Select the Model</option>
-									<option> b</option>
-									<option> c</option>
-								</select>
-							  </div>
-							  <div class="small-12 large-10 medium-10 columns" style="margin-top: 10px;">
-								<select class="btn-wide">
-									<option>Please Select the Year</option>
-									<option> b</option>
-									<option> c</option>
-								</select>
-							  </div>
-							  <div class="small-12 large-10 medium-10 columns" style="margin-top: 10px; float: left;">
-								<input class="btn-wide" type="submit" value="Search" name="submit">
-							  </div>
-							  <!--
-							  <div class="small-12 large-2 medium-2 columns">
-							  <select name="tld">
-							  <option>.com</option>
-							  <option>.net</option>
-							  <option>.org</option>
-							  <option>.eu</option>
-							</select>
-							 </div>
-							 -->
-							  
-						</div>
-					</form>
+					 <div class="content-section">
+                                    <form action="" method="POST" enctype="multipart/form-data" class="form-control">
+                                        <div class="row collapse" >
+                                            <h3 style="color: black">Please select the appropriate MAKE, MODEL, and YEAR:</h3>
+                                        {% csrf_token %}
+                                            {{ form}}
+                                        <div class="form-group">
+                                            <div class="small-12 large-10 medium-10 columns" style="margin-top: 10px; width:100%;">
+                                                <input type="submit" value="Submit" name="submit">
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </form>
+                     </div>
+                <br>
+                    {% if result|length > 0 %}
+          <div class="content-section">
+          <table id="example" class="table table-striped table-bordered" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>OEM</th>
+                                            <th>Model</th>
+                                            <th>Year Range</th>
+                                            <th>Airbag</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <h3 style="color: black">This vehicle MAY CONTAIN an affected airbag. Please complete a VIN search to determine the Airbag status. </h3>
+                                        {% for c in result %}
+                                            <tr>
+                                                <td>{{ c.0 }}</td>
+                                                <td>{{ c.1 }}</td>
+                                                <td>{{ c.2 }}</td>
+                                                <td>{{ c.3 }}</td>
+                                                <td>{{ c.4 }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+          </table>
+          </div>
+      {% else %}
+        <p></p>
+      {% endif %}
 
 				</div>
 			</div>

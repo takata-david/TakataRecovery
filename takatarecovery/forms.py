@@ -1,5 +1,6 @@
 from django import forms
 from .models import takatarecovery, makemodel
+import pandas as pd
 
 class vinCheckForm(forms.Form):
     vin = forms.CharField(label='', max_length=17, required=False, widget=forms.TextInput(
@@ -13,10 +14,23 @@ class detailsForm(forms.Form):
         email = forms.EmailField(label='', required=False, widget=forms.TextInput(
             attrs={'class': 'form-control', 'placeholder': 'Email'}))
 
-OEM = [('oem','c')]
-MODEL =[('a','b')]
+
 YEAR= [tuple([x,x]) for x in range(1998,2019)]
 class makeModelForm(forms.Form):
-        oem = forms.CharField(label='OEM', widget=forms.Select(choices=OEM))
-        model1 = forms.CharField(label='Model', widget=forms.Select(choices=MODEL))
-        year = forms.IntegerField(label='Year', widget=forms.Select(choices=YEAR))
+    locatedQuery = makemodel.objects.values('id', 'oem', 'model', 'year')
+    located = pd.DataFrame(locatedQuery)
+
+    oem1 = located['oem'].unique()
+    OEM = [tuple([o,o]) for o in oem1]
+
+    model0 = located['model'].unique()
+    MODEL =[tuple([m,m]) for m in model0]
+
+    oem = forms.CharField(label='OEM', required=False, widget=forms.Select(choices=OEM))
+    model1 = forms.CharField(label='Model', required=False, widget=forms.Select(choices=MODEL))
+    year = forms.IntegerField(label='Year', required=False, widget=forms.Select(choices=YEAR))
+
+
+class makeModelCheck(forms.ModelForm):
+    class Meta:
+        fields = ['oem', 'model', 'year']

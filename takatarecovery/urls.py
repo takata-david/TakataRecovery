@@ -7,12 +7,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     #path('', views.home, name='takatarecovery-home'),
     path('', views.home, name='takatarecovery-home'),
-    path('makemodel/', views.makemodel, name='takatarecovery-makemodel'),
+    path('makemodel/', views.makeModelCheck, name='takatarecovery-makemodel'),
     path('aboutus/', views.aboutus, name='takatarecovery-aboutus'),
     path('privacy/', views.privacy, name='takatarecovery-privacy'),
     path('contact/', views.contact, name='takatarecovery-contact'),
-    path('index-result/', views.details, name='takatarecovery-details'),
-    path('make-model/', views.makeModelCheck, name='takatarecovery-makeModelCheck')
+    path('index-result/', views.details, name='takatarecovery-details')#,
+    #path('make-model/', views.makeModelCheck, name='takatarecovery-makeModelCheck')
 ]
 
 if settings.DEBUG:
